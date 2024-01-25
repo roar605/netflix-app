@@ -2,18 +2,20 @@ import React, { useRef, useState } from 'react'
 import Header from './Header'
 import bg from "../assets/netflix-bg.jpg"
 import { checkValidData } from "../utils/Validate"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {  createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../utils/FireBase';
 import { useNavigate } from 'react-router-dom';
-
+import { updateProfile } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/UserSlice';
 
 const Login = () => {
   const [isLogIn, setIsLogTn] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
-  const name = useRef(null);
+  const dispatch=useDispatch();
+  const name = useRef();
   const email = useRef(null);
   const password = useRef(null);
   const toggleForm = () => {
@@ -33,8 +35,18 @@ const Login = () => {
           // Signed up 
           const user = userCredential.user;
           // ...
-          navigate("/browse");
-
+          updateProfile(user, {
+            displayName: name.current.value , photoURL: "https://example.com/jane-q-user/profile.jpg"
+          }).then(() => {
+            // Profile updated!
+            // ...
+              // const {uid,email, displayName,photoURL} = auth.currentUser;
+              // dispatch(addUser({uid:uid ,email:email,displayName:displayName,photoURL:photoURL}))
+            navigate("/browse");
+          }).catch((error) => {
+            // An error occurred
+            // ...
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -62,7 +74,6 @@ const Login = () => {
     }
 
   }
-
   return (
     <div>
       <Header />

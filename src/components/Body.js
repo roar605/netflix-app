@@ -28,16 +28,17 @@ const Body = () => {
             if (user) {
               // User is signed in, see docs for a list of available properties
               // https://firebase.google.com/docs/reference/js/auth.user
+     
               const {uid,email, displayName} = user;
-              dispatch(addUser({uid:uid,email:email,displayName:displayName}))
+              dispatch(addUser({uid:uid,email:email,displayName:"Rohit"}))
 
             } else {
               // User is signed out
               // ...
-              dispatch(removeUser)
-              
+              dispatch(removeUser)   
             }
           });
+          
     },[])
   return (
     <div>
